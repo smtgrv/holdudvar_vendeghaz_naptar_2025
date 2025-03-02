@@ -76,28 +76,26 @@
 
         th:first-child,
         td:first-child {
-            text-align: left;
+            text-align: center;
             padding-left: 12px;
-            width: 20%;
-            /* Keskenyebb dátum oszlop */
+            width: 15%;
+            font-size: 14px;
+            font-weight: bold;
         }
 
         th:nth-child(n+2),
         td:nth-child(n+2) {
-            width: calc(80% / 3);
-            /* A többi oszlop szélessége */
+            width: calc(85% / 3);
         }
 
         .booked {
             background-color: #FF6F61;
-            /* Egyszerűbb, kontrasztos szín */
             color: white;
             font-weight: 600;
         }
 
         td.weekend {
             background-color: #f0f0f0;
-            /* Világosabb szín a hétvégékhez */
         }
 
         .footer {
@@ -132,19 +130,18 @@
             td {
                 padding: 6px 8px;
                 font-size: 13px;
-                /* Nagyobb betűméret mobilnézetben */
             }
 
             th:first-child,
             td:first-child {
-                width: 25%;
-                /* Mobilnézetben kicsit szélesebb dátum oszlop */
+                width: 20%;
+                font-size: 16px;
+                font-weight: bold;
             }
 
             th:nth-child(n+2),
             td:nth-child(n+2) {
-                width: calc(75% / 3);
-                /* Mobilnézetben arányosan nőtt a többi oszlop */
+                width: calc(80% / 3);
             }
 
             .footer {
@@ -238,8 +235,10 @@
                 let currentDate = new Date(2025, month - 1, day);
                 let dayOfWeek = currentDate.getDay();
 
-                // Csak a dátum jelenik meg (pl. "04.01")
-                dateCell.textContent = `${month.toString().padStart(2, '0')}.${day.toString().padStart(2, '0')}`;
+                // Csak a nap jelenik meg (pl. "01")
+                dateCell.textContent = `${day.toString().padStart(2, '0')}`;
+                dateCell.style.fontWeight = "bold"; /* Félkövér betűk */
+                dateCell.style.textAlign = "center"; /* Középre zárás */
                 row.appendChild(dateCell);
 
                 if (dayOfWeek === 0 || dayOfWeek === 6) {
