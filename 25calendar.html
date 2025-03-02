@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holdudvar Vendégház Naptár</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #1B4D3E, #3E7368);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin: 2rem;
+            position: relative;
+            /* A lábléc pozicionálásához */
+        }
+
+        h2 {
+            text-align: center;
+            color: #1A4030;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        select {
+            padding: 7px;
+            font-size: 13px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 0 auto 15px auto;
+            display: block;
+            width: 50%;
+            max-width: 180px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            font-size: 13px;
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 6px 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        th:first-child,
+        td:first-child {
+            text-align: left;
+            padding-left: 12px;
+            width: 25%;
+        }
+
+        th:nth-child(n+2),
+        td:nth-child(n+2) {
+            width: calc(75% / 3);
+        }
+
+        .booked {
+            background-color: #FFB9B3;
+            color: white;
+            font-weight: 600;
+        }
+
+        td.weekend {
+            background-color: #e0e0e0;
+        }
+
+        td:first-child {
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .footer {
+            text-align: left;
+            /* Balra igazítás */
+            margin-top: 20px;
+            /* Távolság a táblázat alatt */
+            font-size: 12px;
+            color: #555;
+            font-family: Arial, sans-serif;
+            /* Minimal betűtípus */
+        }
+
+        .footer p {
+            margin: 4px 0;
+            /* Távolság a sorok között */
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1.5rem;
+                max-width: 100%;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            select {
+                font-size: 12px;
+                width: 70%;
+                max-width: 150px;
+            }
+
+            th,
+            td {
+                padding: 5px 6px;
+                font-size: 12px;
+            }
+
+            th:first-child,
+            td:first-child {
+                width: 50%;
+            }
+
+            th:nth-child(n+2),
+            td:nth-child(n+2) {
+                width: calc(50% / 3);
+            }
+
+            .footer {
+                font-size: 10px;
+                /* Kisebb betűméret mobilnézetben */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Holdudvar Vendégház Naptár</h2>
+        <select id="month" onchange="generateCalendar()">
+            <option value="3">Március</option>
+            <option value="4">Április</option>
+            <option value="5">Május</option>
+            <option value="6">Június</option>
+            <option value="7">Július</option>
+            <option value="8">Augusztus</option>
+            <option value="9">Szeptember</option>
+            <option value="10">Október</option>
+        </select>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Dátum</th>
+                    <th>Telihold</th>
+                    <th>Félhold</th>
+                    <th>Holdfény</th>
+                </tr>
+            </thead>
+            <tbody id="calendar-body">
+            </tbody>
+        </table>
+
+        <div class="footer">
+            <p>Telefon: +36 20 258 9544</p>
+            <p>E-mail: holdudvartiszato@gmail.com</p>
+        </div>
+    </div>
+
+    <script>
+        const reservations = {
+            "04-18": [true, true, true],
+            "04-19": [true, true, true],
+            "06-06": [false, false, true],
+            "06-07": [false, false, true],
+            "06-08": [false, false, true],
+            "06-27": [true, false, false],
+            "06-28": [true, false, false],
+            "07-07": [false, true, true],
+            "07-08": [false, true, true],
+            "07-09": [false, true, true],
+            "08-13": [false, true, false],
+            "08-14": [false, true, false],
+            "08-15": [false, true, false],
+            "08-16": [false, true, false],
+            "08-23": [true, false, false],
+            "08-24": [true, false, false],
+            "08-25": [true, false, false],
+            "08-26": [true, false, false],
+            "08-27": [true, false, false],
+            "08-28": [true, false, false],
+            "08-29": [true, false, false],
+            "08-30": [true, false, false],
+            "08-31": [true, false, false],
+            "09-01": [true, false, false],
+            "09-02": [true, false, false],
+            "09-03": [true, false, false],
+            "09-04": [true, false, false],
+            "09-05": [true, false, false],
+            "09-06": [true, false, false],
+            "09-11": [true, true, true],
+            "09-12": [true, true, true],
+            "09-13": [true, true, true]
+        };
+
+        const dayNames = ["Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"];
+
+        function generateCalendar() {
+            let month = parseInt(document.getElementById("month").value);
+            let tableBody = document.getElementById("calendar-body");
+            tableBody.innerHTML = "";
+
+            let daysInMonth = new Date(2025, month, 0).getDate();
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                let row = document.createElement("tr");
+                let dateCell = document.createElement("td");
+                let formattedDate = `${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
+                let currentDate = new Date(2025, month - 1, day);
+                let dayOfWeek = currentDate.getDay();
+                let dayName = dayNames[dayOfWeek];
+
+                dateCell.textContent = `${month.toString().padStart(2, '0')}.${day.toString().padStart(2, '0')} ${dayName}`;
+                row.appendChild(dateCell);
+
+                if (dayOfWeek === 0 || dayOfWeek === 6) {
+                    dateCell.classList.add("weekend");
+                }
+
+                for (let i = 0; i < 3; i++) {
+                    let cell = document.createElement("td");
+                    if (reservations[formattedDate] && reservations[formattedDate][i]) {
+                        cell.classList.add("booked");
+                    }
+                    row.appendChild(cell);
+                }
+
+                tableBody.appendChild(row);
+            }
+        }
+
+        generateCalendar();
+    </script>
+</body>
+
+</html>
