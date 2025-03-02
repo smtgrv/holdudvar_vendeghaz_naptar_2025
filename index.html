@@ -22,25 +22,23 @@
             width: 90%;
             max-width: 700px;
             background-color: white;
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 12px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-            margin: 2rem;
-            position: relative;
-            /* A lábléc pozicionálásához */
+            margin: 1rem;
         }
 
         h2 {
             text-align: center;
             color: #1A4030;
             font-weight: 600;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             font-size: 1.5rem;
         }
 
         select {
             padding: 7px;
-            font-size: 13px;
+            font-size: 14px;
             border: 1px solid #ddd;
             border-radius: 8px;
             margin: 0 auto 15px auto;
@@ -59,13 +57,13 @@
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-            font-size: 13px;
+            font-size: 14px;
             border: 1px solid #ddd;
         }
 
         th,
         td {
-            padding: 6px 8px;
+            padding: 8px 10px;
             text-align: center;
             border: 1px solid #ddd;
         }
@@ -80,49 +78,43 @@
         td:first-child {
             text-align: left;
             padding-left: 12px;
-            width: 25%;
+            width: 20%;
+            /* Keskenyebb dátum oszlop */
         }
 
         th:nth-child(n+2),
         td:nth-child(n+2) {
-            width: calc(75% / 3);
+            width: calc(80% / 3);
+            /* A többi oszlop szélessége */
         }
 
         .booked {
-            background-color: #FFB9B3;
+            background-color: #FF6F61;
+            /* Egyszerűbb, kontrasztos szín */
             color: white;
             font-weight: 600;
         }
 
         td.weekend {
-            background-color: #e0e0e0;
-        }
-
-        td:first-child {
-            font-size: 12px;
-            font-weight: 500;
-            white-space: nowrap;
+            background-color: #f0f0f0;
+            /* Világosabb szín a hétvégékhez */
         }
 
         .footer {
             text-align: left;
-            /* Balra igazítás */
             margin-top: 20px;
-            /* Távolság a táblázat alatt */
             font-size: 12px;
             color: #555;
             font-family: Arial, sans-serif;
-            /* Minimal betűtípus */
         }
 
         .footer p {
             margin: 4px 0;
-            /* Távolság a sorok között */
         }
 
         @media (max-width: 600px) {
             .container {
-                padding: 1.5rem;
+                padding: 1rem;
                 max-width: 100%;
             }
 
@@ -131,30 +123,32 @@
             }
 
             select {
-                font-size: 12px;
+                font-size: 13px;
                 width: 70%;
                 max-width: 150px;
             }
 
             th,
             td {
-                padding: 5px 6px;
-                font-size: 12px;
+                padding: 6px 8px;
+                font-size: 13px;
+                /* Nagyobb betűméret mobilnézetben */
             }
 
             th:first-child,
             td:first-child {
-                width: 50%;
+                width: 25%;
+                /* Mobilnézetben kicsit szélesebb dátum oszlop */
             }
 
             th:nth-child(n+2),
             td:nth-child(n+2) {
-                width: calc(50% / 3);
+                width: calc(75% / 3);
+                /* Mobilnézetben arányosan nőtt a többi oszlop */
             }
 
             .footer {
-                font-size: 10px;
-                /* Kisebb betűméret mobilnézetben */
+                font-size: 11px;
             }
         }
     </style>
@@ -229,8 +223,6 @@
             "09-13": [true, true, true]
         };
 
-        const dayNames = ["Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"];
-
         function generateCalendar() {
             let month = parseInt(document.getElementById("month").value);
             let tableBody = document.getElementById("calendar-body");
@@ -245,9 +237,9 @@
 
                 let currentDate = new Date(2025, month - 1, day);
                 let dayOfWeek = currentDate.getDay();
-                let dayName = dayNames[dayOfWeek];
 
-                dateCell.textContent = `${month.toString().padStart(2, '0')}.${day.toString().padStart(2, '0')} ${dayName}`;
+                // Csak a dátum jelenik meg (pl. "04.01")
+                dateCell.textContent = `${month.toString().padStart(2, '0')}.${day.toString().padStart(2, '0')}`;
                 row.appendChild(dateCell);
 
                 if (dayOfWeek === 0 || dayOfWeek === 6) {
