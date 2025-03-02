@@ -66,12 +66,13 @@
             padding: 8px 10px;
             text-align: center;
             border: 1px solid #ddd;
+            font-weight: 400; /* Normál betűvastagság */
         }
 
         th {
             background-color: #f8f9fa;
-            font-weight: 600;
             color: #333;
+            font-weight: bold; /* Félkövér */
         }
 
         th:first-child,
@@ -79,8 +80,7 @@
             text-align: center;
             padding-left: 12px;
             width: 15%;
-            font-size: 14px;
-            font-weight: bold;
+            font-size: 14px; /* Azonos méretű a dátum is */
         }
 
         th:nth-child(n+2),
@@ -91,7 +91,6 @@
         .booked {
             background-color: #FF6F61;
             color: white;
-            font-weight: 600;
         }
 
         td.weekend {
@@ -135,8 +134,7 @@
             th:first-child,
             td:first-child {
                 width: 20%;
-                font-size: 16px;
-                font-weight: bold;
+                font-size: 13px; /* Azonos méretű a dátum is mobilnézetben */
             }
 
             th:nth-child(n+2),
@@ -237,7 +235,6 @@
 
                 // Csak a nap jelenik meg (pl. "01")
                 dateCell.textContent = `${day.toString().padStart(2, '0')}`;
-                dateCell.style.fontWeight = "bold"; /* Félkövér betűk */
                 dateCell.style.textAlign = "center"; /* Középre zárás */
                 row.appendChild(dateCell);
 
