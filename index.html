@@ -26,6 +26,7 @@
             border-radius: 12px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
             margin: 1rem;
+            position: relative;
         }
 
         h2 {
@@ -66,13 +67,13 @@
             padding: 8px 10px;
             text-align: center;
             border: 1px solid #ddd;
-            font-weight: 400; /* Normál betűvastagság */
+            font-weight: 400;
         }
 
         th {
             background-color: #f8f9fa;
             color: #333;
-            font-weight: bold; /* Félkövér */
+            font-weight: bold;
         }
 
         th:first-child,
@@ -80,7 +81,7 @@
             text-align: center;
             padding-left: 12px;
             width: 15%;
-            font-size: 14px; /* Azonos méretű a dátum is */
+            font-size: 14px;
         }
 
         th:nth-child(n+2),
@@ -98,15 +99,108 @@
         }
 
         .footer {
-            text-align: left;
+            text-align: center;
             margin-top: 20px;
-            font-size: 12px;
-            color: #555;
-            font-family: Arial, sans-serif;
         }
 
-        .footer p {
-            margin: 4px 0;
+        .footer button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #1B4D3E;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .footer button:hover {
+            background-color: #3E7368;
+        }
+
+        /* Homályos háttér és email felület stílusai */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+        }
+
+        .email-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .email-form h3 {
+            text-align: center;
+            color: #1A4030;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .email-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .email-form input,
+        .email-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .email-form textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .email-form button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #1B4D3E;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .email-form button:hover {
+            background-color: #3E7368;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .close-btn:hover {
+            color: #FF6F61;
         }
 
         @media (max-width: 600px) {
@@ -134,7 +228,7 @@
             th:first-child,
             td:first-child {
                 width: 20%;
-                font-size: 13px; /* Azonos méretű a dátum is mobilnézetben */
+                font-size: 13px;
             }
 
             th:nth-child(n+2),
@@ -142,8 +236,13 @@
                 width: calc(80% / 3);
             }
 
-            .footer {
-                font-size: 11px;
+            .footer button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+
+            .email-form {
+                padding: 1.5rem;
             }
         }
     </style>
@@ -153,14 +252,7 @@
     <div class="container">
         <h2>Holdudvar Vendégház Naptár</h2>
         <select id="month" onchange="generateCalendar()">
-            <option value="3">Március</option>
-            <option value="4">Április</option>
-            <option value="5">Május</option>
-            <option value="6">Június</option>
-            <option value="7">Július</option>
-            <option value="8">Augusztus</option>
-            <option value="9">Szeptember</option>
-            <option value="10">Október</option>
+            <!-- Hónapok dinamikus betöltése -->
         </select>
 
         <table>
@@ -177,9 +269,29 @@
         </table>
 
         <div class="footer">
-            <p>Telefon: +36 20 258 9544</p>
-            <p>E-mail: holdudvartiszato@gmail.com</p>
+            <button onclick="openEmailForm()">Ajánlatkérés</button>
         </div>
+    </div>
+
+    <!-- Homályos háttér -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Email küldő felület -->
+    <div class="email-form" id="emailForm">
+        <span class="close-btn" onclick="closeEmailForm()">×</span>
+        <h3>Ajánlatkérés</h3>
+        <form onsubmit="sendEmail(event)">
+            <label for="name">Név:</label>
+            <input type="text" id="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+
+            <label for="message">Üzenet:</label>
+            <textarea id="message" required></textarea>
+
+            <button type="submit">Küldés</button>
+        </form>
     </div>
 
     <script>
@@ -218,6 +330,21 @@
             "09-13": [true, true, true]
         };
 
+        const monthNames = ["Január", "Február", "Március", "Április", "Május", "Június", "Július", "Augusztus", "Szeptember", "Október", "November", "December"];
+
+        function populateMonthDropdown() {
+            const monthDropdown = document.getElementById("month");
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth() + 1;
+
+            for (let i = currentMonth; i <= 12; i++) {
+                const option = document.createElement("option");
+                option.value = i;
+                option.textContent = monthNames[i - 1];
+                monthDropdown.appendChild(option);
+            }
+        }
+
         function generateCalendar() {
             let month = parseInt(document.getElementById("month").value);
             let tableBody = document.getElementById("calendar-body");
@@ -233,9 +360,8 @@
                 let currentDate = new Date(2025, month - 1, day);
                 let dayOfWeek = currentDate.getDay();
 
-                // Csak a nap jelenik meg (pl. "01")
                 dateCell.textContent = `${day.toString().padStart(2, '0')}`;
-                dateCell.style.textAlign = "center"; /* Középre zárás */
+                dateCell.style.textAlign = "center";
                 row.appendChild(dateCell);
 
                 if (dayOfWeek === 0 || dayOfWeek === 6) {
@@ -254,6 +380,30 @@
             }
         }
 
+        function openEmailForm() {
+            document.getElementById("overlay").style.display = "block";
+            document.getElementById("emailForm").style.display = "block";
+        }
+
+        function closeEmailForm() {
+            document.getElementById("overlay").style.display = "none";
+            document.getElementById("emailForm").style.display = "none";
+        }
+
+        function sendEmail(event) {
+            event.preventDefault();
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const message = document.getElementById("message").value;
+
+            const mailtoLink = `mailto:holdudvartiszato@gmail.com?subject=Ajánlatkérés - ${name}&body=${encodeURIComponent(message)}`;
+            window.location.href = mailtoLink;
+
+            // Bezárás
+            closeEmailForm();
+        }
+
+        populateMonthDropdown();
         generateCalendar();
     </script>
 </body>
