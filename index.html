@@ -117,7 +117,7 @@
             background-color: #3E7368;
         }
 
-        /* Homályos háttér és email felület stílusai */
+        /* Overlay and contact info styles */
         .overlay {
             display: none;
             position: fixed;
@@ -130,7 +130,7 @@
             z-index: 1000;
         }
 
-        .email-form {
+        .contact-info {
             display: none;
             position: fixed;
             top: 50%;
@@ -142,52 +142,33 @@
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
             z-index: 1001;
             width: 90%;
-            max-width: 500px;
+            max-width: 400px;
+            text-align: center;
         }
 
-        .email-form h3 {
+        .contact-info h3 {
             text-align: center;
             color: #1A4030;
             font-weight: 600;
             margin-bottom: 1.5rem;
         }
 
-        .email-form label {
+        .contact-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-item i {
+            font-size: 24px;
+            color: #1B4D3E;
+            margin-bottom: 10px;
             display: block;
-            margin-bottom: 0.5rem;
+        }
+
+        .contact-text {
+            font-size: 18px;
             color: #333;
+            margin: 10px 0;
             font-weight: 500;
-        }
-
-        .email-form input,
-        .email-form textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .email-form textarea {
-            height: 150px;
-            resize: vertical;
-        }
-
-        .email-form button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #1B4D3E;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .email-form button:hover {
-            background-color: #3E7368;
         }
 
         .close-btn {
@@ -241,20 +222,24 @@
                 padding: 8px 16px;
             }
 
-            .email-form {
+            .contact-info {
                 padding: 1.5rem;
+            }
+
+            .contact-text {
+                font-size: 16px;
             }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 
 <body>
     <div class="container">
         <h2>Holdudvar Vendégház Naptár</h2>
         <select id="month" onchange="generateCalendar()">
-            <!-- Hónapok dinamikus betöltése -->
+            <!-- Months will be loaded dynamically -->
         </select>
-
         <table>
             <thead>
                 <tr>
@@ -264,85 +249,78 @@
                     <th>Holdfény</th>
                 </tr>
             </thead>
-            <tbody id="calendar-body">
-            </tbody>
+            <tbody id="calendar-body"></tbody>
         </table>
-
         <div class="footer">
-            <button onclick="openEmailForm()">Ajánlatkérés</button>
+            <button onclick="openContactInfo()">Elérhetőség</button>
         </div>
     </div>
-
-    <!-- Homályos háttér -->
+    <!-- Overlay background -->
     <div class="overlay" id="overlay"></div>
-
-    <!-- Email küldő felület -->
-    <div class="email-form" id="emailForm">
-        <span class="close-btn" onclick="closeEmailForm()">×</span>
-        <h3>Ajánlatkérés</h3>
-        <form onsubmit="sendEmail(event)">
-            <label for="name">Név:</label>
-            <input type="text" id="name" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" required>
-
-            <label for="message">Üzenet:</label>
-            <textarea id="message" required></textarea>
-
-            <button type="submit">Küldés</button>
-        </form>
+    <!-- Contact information popup -->
+    <div class="contact-info" id="contactInfo">
+        <span class="close-btn" onclick="closeContactInfo()">×</span>
+        <h3>Elérhetőség</h3>
+        <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <div class="contact-text">holdudvartiszato@gmail.com</div>
+        </div>
+        <div class="contact-item">
+            <i class="fas fa-phone"></i>
+            <div class="contact-text">+36-20-258-9544</div>
+        </div>
+        <div class="contact-item">
+            <i class="fas fa-info-circle"></i>
+            <p>Kérjük, lépjen kapcsolatba velünk emailben vagy telefonon!</p>
+        </div>
     </div>
-
     <script>
         const reservations = {
             "04-18": [true, true, true],
             "04-19": [true, true, true],
-"04-25": [false, true, false],
-"04-26": [false, true, false],
+            "04-25": [false, true, false],
+            "04-26": [false, true, false],
             "05-01": [true, true, true],
             "05-02": [true, true, true],
-"05-09": [true, false, true],
-"05-10": [true, false, true],
-
+            "05-09": [true, false, true],
+            "05-10": [true, false, true],
             "05-16": [false, false, true],
             "05-17": [false, false, true],
             "06-06": [false, false, true],
             "06-07": [false, true, true],
             "06-08": [false, true, true],
             "06-21": [false, true, false],
-"06-22": [false, true, false],
-"06-23": [false, true, false],
-
+            "06-22": [false, true, false],
+            "06-23": [false, true, false],
             "06-27": [true, true, true],
             "06-28": [true, true, true],
-"07-04": [false, true, true],
-"07-05": [false, true, true],
+            "07-04": [false, true, true],
+            "07-05": [false, true, true],
             "07-07": [false, true, true],
             "07-08": [false, true, true],
             "07-09": [false, true, true],
             "07-11": [true, true, true],
-"07-12": [true, true, true],
-"07-24": [false, true, false],
-"07-25": [false, true, false],
-"07-26": [false, true, false],
-"07-28": [true, false, false],
-"07-29": [true, false, false],
-"07-30": [true, false, false],
-"07-31": [true, false, false],
-"08-01": [true, true, true],
-"08-02": [true, true, true],
-"08-07": [true, true, true],
-"08-08": [true, true, true],
-"08-09": [true, true, true],
-"08-11": [false, false, false],
-"08-12": [false, false, false],
+            "07-12": [true, true, true],
+            "07-24": [false, true, false],
+            "07-25": [false, true, false],
+            "07-26": [false, true, false],
+            "07-28": [true, false, false],
+            "07-29": [true, false, false],
+            "07-30": [true, false, false],
+            "07-31": [true, false, false],
+            "08-01": [true, true, true],
+            "08-02": [true, true, true],
+            "08-07": [true, true, true],
+            "08-08": [true, true, true],
+            "08-09": [true, true, true],
+            "08-11": [false, false, false],
+            "08-12": [false, false, false],
             "08-13": [false, true, false],
-"08-14": [false, true, false],
-"08-15": [false, true, false],
-"08-16": [false, true, false],
-"08-19": [true, true, true],
-"08-20": [true, true, true],
+            "08-14": [false, true, false],
+            "08-15": [false, true, false],
+            "08-16": [false, true, false],
+            "08-19": [true, true, true],
+            "08-20": [true, true, true],
             "08-23": [true, false, false],
             "08-24": [true, false, false],
             "08-25": [true, false, false],
@@ -366,17 +344,14 @@
             "09-17": [true, false, false],
             "09-18": [true, false, false],
             "09-19": [true, false, false],
-            "09-20": [true, false, false],  
-
+            "09-20": [true, false, false],
         };
-
         const monthNames = ["Január", "Február", "Március", "Április", "Május", "Június", "Július", "Augusztus", "Szeptember", "Október", "November", "December"];
 
         function populateMonthDropdown() {
             const monthDropdown = document.getElementById("month");
             const currentDate = new Date();
             const currentMonth = currentDate.getMonth() + 1;
-
             for (let i = currentMonth; i <= 12; i++) {
                 const option = document.createElement("option");
                 option.value = i;
@@ -389,25 +364,19 @@
             let month = parseInt(document.getElementById("month").value);
             let tableBody = document.getElementById("calendar-body");
             tableBody.innerHTML = "";
-
             let daysInMonth = new Date(2025, month, 0).getDate();
-
             for (let day = 1; day <= daysInMonth; day++) {
                 let row = document.createElement("tr");
                 let dateCell = document.createElement("td");
                 let formattedDate = `${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-
                 let currentDate = new Date(2025, month - 1, day);
                 let dayOfWeek = currentDate.getDay();
-
                 dateCell.textContent = `${day.toString().padStart(2, '0')}`;
                 dateCell.style.textAlign = "center";
                 row.appendChild(dateCell);
-
                 if (dayOfWeek === 0 || dayOfWeek === 6) {
                     dateCell.classList.add("weekend");
                 }
-
                 for (let i = 0; i < 3; i++) {
                     let cell = document.createElement("td");
                     if (reservations[formattedDate] && reservations[formattedDate][i]) {
@@ -415,34 +384,19 @@
                     }
                     row.appendChild(cell);
                 }
-
                 tableBody.appendChild(row);
             }
         }
 
-        function openEmailForm() {
+        function openContactInfo() {
             document.getElementById("overlay").style.display = "block";
-            document.getElementById("emailForm").style.display = "block";
+            document.getElementById("contactInfo").style.display = "block";
         }
 
-        function closeEmailForm() {
+        function closeContactInfo() {
             document.getElementById("overlay").style.display = "none";
-            document.getElementById("emailForm").style.display = "none";
+            document.getElementById("contactInfo").style.display = "none";
         }
-
-        function sendEmail(event) {
-            event.preventDefault();
-            const name = document.getElementById("name").value;
-            const email = document.getElementById("email").value;
-            const message = document.getElementById("message").value;
-
-            const mailtoLink = `mailto:holdudvartiszato@gmail.com?subject=Ajánlatkérés - ${name}&body=${encodeURIComponent(message)}`;
-            window.location.href = mailtoLink;
-
-            // Bezárás
-            closeEmailForm();
-        }
-
         populateMonthDropdown();
         generateCalendar();
     </script>
