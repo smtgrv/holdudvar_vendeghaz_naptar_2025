@@ -16,7 +16,7 @@ Foglaláshoz vagy további kérdés esetén kérjük, írj nekünk:
 
 ---
 
-## 🇬🇧 English Version
+## English
 
 # Holdudvar Guesthouse – Booking Calendar 2025
 
